@@ -1,0 +1,737 @@
+/home/app/redis-4.0.10/src/redis-cli
+/home/app/phoenix-4.14.0/bin/sqlline.py
+
+
+
+
+-----------------------------------------------
+zip -d cloud_video_pubic_security.jar   META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
+
+ ps aux | grep cloud_video_pubic_security
+
+
+-------------------------------------------------------------
+
+select  "row","JSONMessage" from "faceListMessagePooldb" where \"row\" like '" + newtime + "3%'"
+select count(1) as \"count\",\"" + k + "\" from \"alertData\"  where \"num\" like '"
+
+select a.DATE,a.CJSBXXBZ,sum(a.NUM) from (
+select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ",count(1) "num" from "ZA_FaceCaptureListMessagePooldb" where "row" like '102102%' group by SUBSTR("row",0,6),"CJSBXXBZ" HAVING "CJSBXXBZ" is not null
+union all
+select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ",count(1) from "ZA_MotorVehicleEventListMessagePooldb" where "row" like '102102%' group by SUBSTR("row",0,6),"CJSBXXBZ" HAVING "CJSBXXBZ" is not null
+)a group by a.DATE,a.CJSBXXBZ
+;
+
+
+
+   select '20'||REVERSE(SUBSTR("row",0,6)) "date","DeviceID" as "DEVICEID",count(1) as "NUM" from "faceListMessagePooldb" where "row" like '412102%' group by SUBSTR("row",0,6),"DeviceID"
+   union all
+   select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ" as "DEVICEID" ,count(1) as "NUM"  from "ZA_FaceCaptureListdb" where "row" like '412102%' group by SUBSTR("row",0,6),"CJSBXXBZ"
+   union all
+   select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ" as "DEVICEID" ,count(1) as "NUM"  from "ZA_MotorVehicleEventListdb" where "row" like '412102%' group by SUBSTR("row",0,6),"CJSBXXBZ"
+
+
+
+
+--------------------------分割线-------------------------------------
+
+drop index "idx_MotorVehicleListMessagePooldb_row"  ON "MotorVehicleListMessagePooldb";
+drop index "idx_faceListMessagePooldb_row"  ON "faceListMessagePooldb";
+drop index "idx_imageListMessagePooldb_row"  ON "imageListMessagePooldb";
+drop index "idx_personListMessagePooldb_row"  ON "personListMessagePooldb";
+
+drop index "idx_ZA_FaceCaptureListdb_row"  ON "ZA_FaceCaptureListdb";
+drop index "idx_ZA_MotorVehicleEventListdb_row"  ON "ZA_MotorVehicleEventListdb";
+
+drop index "idx_CaseListMessagePooldb_row"  ON "CaseListMessagePooldb";
+drop index "idx_FileListMessagePooldb_row"  ON "FileListMessagePooldb";
+drop index "idx_NonMotorVehicleListMessagePooldb_row"  ON "NonMotorVehicleListMessagePooldb";
+drop index "idx_SceneListMessagePooldb_row"  ON "SceneListMessagePooldb";
+drop index "idx_ThingListMessagePooldb_row"  ON "ThingListMessagePooldb";
+drop index "idx_VideoSliceListMessagePooldb_row"  ON "VideoSliceListMessagePooldb";
+drop index "idx_faceListMessagePooldb_all_row"  ON "faceListMessagePooldb";
+drop index "idx_imageListMessagePooldb_all_row"  ON "imageListMessagePooldb";
+
+
+
+
+CREATE INDEX IF NOT EXISTS "idx_faceListMessagePooldb_all_row"  ON "faceListMessagePooldb"("row","info"."DeviceID","info"."ImageInfoShotTime");
+drop index "idx_faceListMessagePooldb_all_row"  ON "faceListMessagePooldb;
+
+
+CREATE INDEX IF NOT EXISTS "idx_imageListMessagePooldb_all_row"  ON "imageListMessagePooldb"("row","info"."ShotTime");
+drop index "idx_imageListMessagePooldb_all_row"  ON "imageListMessagePooldb";
+
+CREATE INDEX IF NOT EXISTS "idx_personListMessagePooldb_all_row"  ON "personListMessagePooldb"("row","info"."DeviceID","info"."SubImageInfoShotTime");
+ drop index "idx_personListMessagePooldb_all_row"  ON "personListMessagePooldb";
+
+CREATE INDEX IF NOT EXISTS "idx_MotorVehicleListMessagePooldb_all_row"  ON "MotorVehicleListMessagePooldb"("row","info"."DeviceID","info"."ImageInfoShotTime");
+drop index "idx_MotorVehicleListMessagePooldb_all_row"  ON "MotorVehicleListMessagePooldb";
+
+<!-- 分割线 -->
+
+CREATE INDEX IF NOT EXISTS "idx_ZA_FaceCaptureListdb_all_row"  ON "ZA_FaceCaptureListdb"("row","info"."CJSBXXBZ","info"."CJSJ");
+ drop index "idx_ZA_FaceCaptureListdb_all_row"  ON "ZA_FaceCaptureListdb";
+
+CREATE INDEX IF NOT EXISTS "idx_ZA_MotorVehicleEventListdb_all_row"  ON "ZA_MotorVehicleEventListdb"("row","info"."CJSBXXBZ","info"."CJSJ");
+drop index "idx_ZA_MotorVehicleEventListdb_all_row"  ON "ZA_MotorVehicleEventListdb";
+
+
+
+
+--------------------------------------------------------------------
+
+phoenix 删除索引操作
+drop index "idx_faceListMessagePooldb_all_row"  ON "faceListMessagePooldb";
+
+drop index "索引表名"  ON "主题表名";
+
+
+hbase
+建表
+
+create 'CaseListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_CaseListMessagePooldb_row"  ON "CaseListMessagePooldb"("row");
+
+drop table  "CaseListMessagePooldb";
+create table  "CaseListMessagePooldb" (
+"row"  varchar primary key,
+"info"."CaseID" varchar,
+"info"."CaseName" varchar,
+"info"."CaseAbstract" varchar,
+"info"."ClueID" varchar,
+"info"."TimeUpLimit" varchar,
+"info"."CreateTime" varchar,
+"info"."PlaceCode" varchar,
+"info"."PlaceFullAddress" varchar,
+"info"."MotorVehicleIDs" varchar,
+"info"."NonMotorVehicleIDs" varchar,
+"info"."PersonIDs" varchar,
+"info"."FaceIDs" varchar,
+"info"."ThingIDs" varchar,
+"info"."SceneIDs" varchar,
+"info"."State" varchar,
+"info"."FileInfoFileID" varchar,
+"info"."FileInfoInfoKind" varchar,
+"info"."FileInfoSource" varchar,
+"info"."FileInfoFileName" varchar,
+"info"."FileInfoStoragePath" varchar,
+"info"."FileInfoFileHash" varchar,
+"info"."FileInfoFileFormat" varchar,
+"info"."FileInfoTitle" varchar,
+"info"."FileInfoEntryTime" varchar,
+"info"."FileInfoFileSize" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+
+
+create 'VideoSliceListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_VideoSliceListMessagePooldb_row"  ON "VideoSliceListMessagePooldb"("row");
+
+drop table  "VideoSliceListMessagePooldb";
+create table  "VideoSliceListMessagePooldb" (
+"row"  varchar primary key,
+"info"."VideoID" varchar,
+"info"."InfoKind" varchar,
+"info"."VideoSource" varchar,
+"info"."FileHash" varchar,
+"info"."FileFormat" varchar,
+"info"."CodedFormat" varchar,
+"info"."AudioFlag" varchar,
+"info"."Title" varchar,
+"info"."ContentDescription" varchar,
+"info"."ShotPlaceCode" varchar,
+"info"."VideoLen" varchar,
+"info"."BeginTime" varchar,
+"info"."EndTime" varchar,
+"info"."StoragePath" varchar,
+"info"."ThumbnailStoragePath" varchar,
+"info"."ShotPlaceFullAdress" varchar,
+"info"."ShotPlaceLongitude" varchar,
+"info"."ShotPlaceLatitude" varchar,
+"info"."EntryClerkOrg" varchar,
+"info"."EntryTime" varchar,
+"info"."FileSize" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+
+create 'FileListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_FileListMessagePooldb_row"  ON "FileListMessagePooldb"("row");
+
+drop table  "FileListMessagePooldb";
+create table  "FileListMessagePooldb" (
+"row"  varchar primary key,
+"info"."FileID" varchar,
+"info"."InfoKind" varchar,
+"info"."Source" varchar,
+"info"."FileName" varchar,
+"info"."StoragePath" varchar,
+"info"."FileHash" varchar,
+"info"."FileFormat" varchar,
+"info"."Title" varchar,
+"info"."EntryTime" varchar,
+"info"."FileSize" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+create 'SceneListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_SceneListMessagePooldb_row"  ON "SceneListMessagePooldb"("row");
+
+drop table  "SceneListMessagePooldb";
+create table  "SceneListMessagePooldb" (
+"row"  varchar primary key,
+"info"."SceneID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."DeviceID" varchar,
+"info"."BeginTime" varchar,
+"info"."PlaceType" varchar,
+"info"."WeatherType" varchar,
+"info"."SceneDescribe" varchar,
+"info"."SceneType" varchar,
+"info"."RoadAlignmentType" varchar,
+"info"."RoadTerrainType" varchar,
+"info"."RoadSurfaceType" varchar,
+"info"."RoadCoditionType" varchar,
+"info"."RoadJunctionSectionType" varchar,
+"info"."RoadLightingType" varchar,
+"info"."Illustration" varchar,
+"info"."WindDirection" varchar,
+"info"."Illumination" varchar,
+"info"."FieldCondition" varchar,
+"info"."Temperature" varchar,
+"info"."Humidity" varchar,
+"info"."PopulationDensity" varchar,
+"info"."DenseDegree" varchar,
+"info"."Importance" varchar,
+"info"."ImageInfoImageID" varchar,
+"info"."ImageInfoEventSort" varchar,
+"info"."ImageInfoDeviceID" varchar,
+"info"."ImageInfoStoragePath" varchar,
+"info"."ImageInfoType" varchar,
+"info"."ImageInfoFileFormat" varchar,
+"info"."ImageInfoShotTime" varchar,
+"info"."ImageInfoWidth" varchar,
+"info"."ImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+create 'ThingListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_ThingListMessagePooldb_row"  ON "ThingListMessagePooldb"("row");
+
+drop table  "ThingListMessagePooldb";
+create table  "ThingListMessagePooldb" (
+"row"  varchar primary key,
+"info"."ThingID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."DeviceID" varchar,
+"info"."LeftTopX" varchar,
+"info"."LeftTopY" varchar,
+"info"."RightBtmX" varchar,
+"info"."RightBtmY" varchar,
+"info"."LocationMarkTime" varchar,
+"info"."AppearTime" varchar,
+"info"."DisappearTime" varchar,
+"info"."Name" varchar,
+"info"."Shape" varchar,
+"info"."Color" varchar,
+"info"."Size" varchar,
+"info"."Material" varchar,
+"info"."Characteristic" varchar,
+"info"."Propertiy" varchar,
+"info"."InvolvedObjType" varchar,
+"info"."FirearmsAmmunitionType" varchar,
+"info"."ToolTraceType" varchar,
+"info"."EvidenceType" varchar,
+"info"."CaseEvidenceType" varchar,
+"info"."ImageInfoImageID" varchar,
+"info"."ImageInfoEventSort" varchar,
+"info"."ImageInfoDeviceID" varchar,
+"info"."ImageInfoStoragePath" varchar,
+"info"."ImageInfoType" varchar,
+"info"."ImageInfoFileFormat" varchar,
+"info"."ImageInfoShotTime" varchar,
+"info"."ImageInfoWidth" varchar,
+"info"."ImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+
+create 'NonMotorVehicleListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_NonMotorVehicleListMessagePooldb_row"  ON "NonMotorVehicleListMessagePooldb"("row");
+
+drop table  "NonMotorVehicleListMessagePooldb";
+create table  "NonMotorVehicleListMessagePooldb" (
+"row"  varchar primary key,
+"info"."NonMotorVehicleID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."DeviceID" varchar,
+"info"."LeftTopX" varchar,
+"info"."LeftTopY" varchar,
+"info"."RightBtmX" varchar,
+"info"."RightBtmY" varchar,
+"info"."HasPlate" varchar,
+"info"."PlateClass" varchar,
+"info"."PlateColor" varchar,
+"info"."PlateNo" varchar,
+"info"."PlateNoAttach" varchar,
+"info"."PlateDescribe" varchar,
+"info"."IsDecked" varchar,
+"info"."IsAltered" varchar,
+"info"."IsCovered" varchar,
+"info"."DrivingStatusCode" varchar,
+"info"."UsingPropertiesCode" varchar,
+"info"."VehicleBrand" varchar,
+"info"."VehicleType" varchar,
+"info"."VehicleLength" varchar,
+"info"."VehicleWidth" varchar,
+"info"."VehicleHeight" varchar,
+"info"."VehicleColor" varchar,
+"info"."VehicleHood" varchar,
+"info"."VehicleTrunk" varchar,
+"info"."VehicleWheel" varchar,
+"info"."WheelPrintedPattern" varchar,
+"info"."VehicleWindow" varchar,
+"info"."VehicleRoof" varchar,
+"info"."VehicleDoor" varchar,
+"info"."SideOfVehicle" varchar,
+"info"."CarOfVehicle" varchar,
+"info"."RearviewMirror" varchar,
+"info"."VehicleChassis" varchar,
+"info"."VehicleShielding" varchar,
+"info"."FilmColor" varchar,
+"info"."ImageInfoImageID" varchar,
+"info"."ImageInfoEventSort" varchar,
+"info"."ImageInfoDeviceID" varchar,
+"info"."ImageInfoStoragePath" varchar,
+"info"."ImageInfoType" varchar,
+"info"."ImageInfoFileFormat" varchar,
+"info"."ImageInfoShotTime" varchar,
+"info"."ImageInfoWidth" varchar,
+"info"."ImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------
+create 'MotorVehicleListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_MotorVehicleListMessagePooldb_row"  ON "MotorVehicleListMessagePooldb"("row");
+
+drop table  "MotorVehicleListMessagePooldb";
+create table  "MotorVehicleListMessagePooldb" (
+"row"  varchar primary key,
+"info"."MotorVehicleID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."TollgateID" varchar,
+"info"."DeviceID" varchar,
+"info"."StorageUrl1" varchar,
+"info"."StorageUrl3" varchar,
+"info"."StorageUrl5" varchar,
+"info"."LeftTopX" varchar,
+"info"."LeftTopY" varchar,
+"info"."RightBtmX" varchar,
+"info"."RightBtmY" varchar,
+"info"."LaneNo" varchar,
+"info"."HasPlate" varchar,
+"info"."PlateClass" varchar,
+"info"."PlateColor" varchar,
+"info"."PlateNo" varchar,
+"info"."PlateNoAttach" varchar,
+"info"."PlateDescribe" varchar,
+"info"."IsDecked" varchar,
+"info"."IsAltered" varchar,
+"info"."IsCovered" varchar,
+"info"."Speed" varchar,
+"info"."Direction" varchar,
+"info"."DrivingStatusCode" varchar,
+"info"."UsingPropertiesCode" varchar,
+"info"."VehicleClass" varchar,
+"info"."VehicleBrand" varchar,
+"info"."VehicleModel" varchar,
+"info"."VehicleStyles" varchar,
+"info"."VehicleLength" varchar,
+"info"."VehicleWidth" varchar,
+"info"."VehicleHeight" varchar,
+"info"."VehicleColor" varchar,
+"info"."VehicleColorDepth" varchar,
+"info"."VehicleHood" varchar,
+"info"."VehicleTrunk" varchar,
+"info"."VehicleWheel" varchar,
+"info"."WheelPrintedPattern" varchar,
+"info"."VehicleWindow" varchar,
+"info"."VehicleRoof" varchar,
+"info"."VehicleDoor" varchar,
+"info"."SideOfVehicle" varchar,
+"info"."CarOfVehicle" varchar,
+"info"."RearviewMirror" varchar,
+"info"."VehicleChassis" varchar,
+"info"."VehicleShielding" varchar,
+"info"."FilmColor" varchar,
+"info"."IsModified" varchar,
+"info"."HitMarkInfo" varchar,
+"info"."VehicleBodyDesc" varchar,
+"info"."VehicleFrontItem" varchar,
+"info"."DescOfFrontItem" varchar,
+"info"."VehicleRearItem" varchar,
+"info"."DescOfRearItem" varchar,
+"info"."NumOfPassenger" varchar,
+"info"."PassTime" varchar,
+"info"."NameOfPassedRoad" varchar,
+"info"."IsSuspicious" varchar,
+"info"."PlateReliability" varchar,
+"info"."PlateCharReliability" varchar,
+"info"."BrandReliability" varchar,
+"info"."ImageInfoImageID" varchar,
+"info"."ImageInfoEventSort" varchar,
+"info"."ImageInfoDeviceID" varchar,
+"info"."ImageInfoStoragePath" varchar,
+"info"."ImageInfoType" varchar,
+"info"."ImageInfoFileFormat" varchar,
+"info"."ImageInfoShotTime" varchar,
+"info"."ImageInfoWidth" varchar,
+"info"."ImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+----------------------------------
+
+
+
+
+create 'faceListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+//
+CREATE INDEX IF NOT EXISTS "idx_faceListMessagePooldb_all_row"  ON "faceListMessagePooldb"("row","info"."DeviceID","info"."ImageInfoShotTime");
+
+CREATE INDEX IF NOT EXISTS "idx_faceListMessagePooldb_row"  ON "faceListMessagePooldb"("row");
+
+drop table  "faceListMessagePooldb";
+create table  "faceListMessagePooldb" (
+"row"  varchar primary key,
+"info"."FaceID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."DeviceID" varchar,
+"info"."LeftTopX" varchar,
+"info"."LeftTopY" varchar,
+"info"."RightBtmX" varchar,
+"info"."RightBtmY" varchar,
+"info"."LocationMarkTime" varchar,
+"info"."FaceAppearTime" varchar,
+"info"."FaceDisAppearTime" varchar,
+"info"."IDType" varchar,
+"info"."IDNumber" varchar,
+"info"."Name" varchar,
+"info"."UsedName" varchar,
+"info"."Alias" varchar,
+"info"."GenderCode" varchar,
+"info"."AgeUpLimit" varchar,
+"info"."AgeLowerLimit" varchar,
+"info"."EthicCode" varchar,
+"info"."NationalityCode" varchar,
+"info"."NativeCityCode" varchar,
+"info"."ResidenceAdminDivision" varchar,
+"info"."ChineseAccentCode" varchar,
+"info"."JobCategory" varchar,
+"info"."AccompanyNumber" varchar,
+"info"."SkinColor" varchar,
+"info"."HairStyle" varchar,
+"info"."HairColor" varchar,
+"info"."FaceStyle" varchar,
+"info"."FacialFeature" varchar,
+"info"."PhysicalFeature" varchar,
+"info"."RespiratorColor" varchar,
+"info"."CapStyle" varchar,
+"info"."CapColor" varchar,
+"info"."GlassStyle" varchar,
+"info"."GlassColor" varchar,
+"info"."IsDriver" varchar,
+"info"."IsForeigner" varchar,
+"info"."PassportType" varchar,
+"info"."ImmigrantTypeCode" varchar,
+"info"."IsSuspectedTerrorist" varchar,
+"info"."SuspectedTerroristNumber" varchar,
+"info"."IsCriminalInvolved" varchar,
+"info"."CriminalInvolvedSpecilisationCode" varchar,
+"info"."BodySpeciallMark" varchar,
+"info"."CrimeMethod" varchar,
+"info"."CrimeCharacterCode" varchar,
+"info"."EscapedCriminalNumber" varchar,
+"info"."IsDetainees" varchar,
+"info"."DetentionHouseCode" varchar,
+"info"."DetaineesIdentity" varchar,
+"info"."DetaineesSpecialIdentity" varchar,
+"info"."MemberTypeCode" varchar,
+"info"."IsVictim" varchar,
+"info"."VictimType" varchar,
+"info"."InjuredDegree" varchar,
+"info"."CorpseConditionCode" varchar,
+"info"."IsSuspiciousPerson" varchar,
+"info"."Attitude" varchar,
+"info"."Similaritydegree" varchar,
+"info"."EyebrowStyle" varchar,
+"info"."NoseStyle" varchar,
+"info"."MustacheStyle" varchar,
+"info"."LipStyle" varchar,
+"info"."WrinklePouch" varchar,
+"info"."AcneStain" varchar,
+"info"."FreckleBirthmark" varchar,
+"info"."ScarDimple" varchar,
+"info"."OtherFeature" varchar,
+"info"."ImageInfoImageID" varchar,
+"info"."ImageInfoEventSort" varchar,
+"info"."ImageInfoDeviceID" varchar,
+"info"."ImageInfoStoragePath" varchar,
+"info"."ImageInfoType" varchar,
+"info"."ImageInfoFileFormat" varchar,
+"info"."ImageInfoShotTime" varchar,
+"info"."ImageInfoWidth" varchar,
+"info"."ImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+----------------------------------
+create 'imageListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+//测试多条件索引
+CREATE INDEX IF NOT EXISTS "idx_imageListMessagePooldb_all_row"  ON "imageListMessagePooldb"("row","info"."ImageID","info"."ShotTime");
+
+CREATE INDEX IF NOT EXISTS "idx_imageListMessagePooldb_row"  ON "imageListMessagePooldb"("row");
+
+drop table  "imageListMessagePooldb";
+create table  "imageListMessagePooldb" (
+"row"  varchar primary key,
+"info"."ImageID" varchar,
+"info"."InfoKind" varchar,
+"info"."ImageSource" varchar,
+"info"."EventSort" varchar,
+"info"."StoragePath" varchar,
+"info"."ShotTime" varchar,
+"info"."ShotPlaceFullAdress" varchar,
+"info"."ShotPlaceLongitude" varchar,
+"info"."ShotPlaceLatitude" varchar,
+"info"."EntryClerkOrg" varchar,
+"info"."EntryTime" varchar,
+"info"."FileHash" varchar,
+"info"."FileFormat" varchar,
+"info"."Title" varchar,
+"info"."ContentDescription" varchar,
+"info"."Width" varchar,
+"info"."Height" varchar,
+"info"."SecurityLevel" varchar,
+"info"."FileSize" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+----------------------------------
+
+create 'personListMessagePooldb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_personListMessagePooldb_row"  ON "personListMessagePooldb"("row");
+
+drop table  "personListMessagePooldb";
+create table  "personListMessagePooldb" (
+"row"  varchar primary key,
+"info"."PersonID" varchar,
+"info"."InfoKind" varchar,
+"info"."SourceID" varchar,
+"info"."DeviceID" varchar,
+"info"."LeftTopX" varchar,
+"info"."LeftTopY" varchar,
+"info"."RightBtmX" varchar,
+"info"."RightBtmY" varchar,
+"info"."LocationMarkTime" varchar,
+"info"."PersonAppearTime" varchar,
+"info"."PersonDisAppearTime" varchar,
+"info"."IDType" varchar,
+"info"."IDNumber" varchar,
+"info"."Name" varchar,
+"info"."UsedName" varchar,
+"info"."Alias" varchar,
+"info"."GenderCode" varchar,
+"info"."AgeUpLimit" varchar,
+"info"."AgeLowerLimit" varchar,
+"info"."EthicCode" varchar,
+"info"."NationalityCode" varchar,
+"info"."NativeCityCode" varchar,
+"info"."ResidenceAdminDivision" varchar,
+"info"."ChineseAccentCode" varchar,
+"info"."PersonOrg" varchar,
+"info"."JobCategory" varchar,
+"info"."AccompanyNumber" varchar,
+"info"."HeightUpLimit" varchar,
+"info"."HeightLowerLimit" varchar,
+"info"."BodyType" varchar,
+"info"."SkinColor" varchar,
+"info"."HairStyle" varchar,
+"info"."HairColor" varchar,
+"info"."Gesture" varchar,
+"info"."Status" varchar,
+"info"."FaceStyle" varchar,
+"info"."FacialFeature" varchar,
+"info"."PhysicalFeature" varchar,
+"info"."BodyFeature" varchar,
+"info"."HabitualMovement" varchar,
+"info"."Behavior" varchar,
+"info"."BehaviorDescription" varchar,
+"info"."Appendant" varchar,
+"info"."AppendantDescription" varchar,
+"info"."UmbrellaColor" varchar,
+"info"."RespiratorColor" varchar,
+"info"."CapStyle" varchar,
+"info"."CapColor" varchar,
+"info"."GlassStyle" varchar,
+"info"."GlassColor" varchar,
+"info"."ScarfColor" varchar,
+"info"."BagStyle" varchar,
+"info"."BagColor" varchar,
+"info"."CoatStyle" varchar,
+"info"."CoatLength" varchar,
+"info"."CoatColor" varchar,
+"info"."TrousersStyle" varchar,
+"info"."TrousersColor" varchar,
+"info"."TrousersLen" varchar,
+"info"."ShoesStyle" varchar,
+"info"."ShoesColor" varchar,
+"info"."IsDriver" varchar,
+"info"."IsForeigner" varchar,
+"info"."PassportType" varchar,
+"info"."ImmigrantTypeCode" varchar,
+"info"."IsSuspectedTerrorist" varchar,
+"info"."SuspectedTerroristNumber" varchar,
+"info"."IsCriminalInvolved" varchar,
+"info"."CriminalInvolvedSpecilisationCode" varchar,
+"info"."BodySpeciallMark" varchar,
+"info"."CrimeMethod" varchar,
+"info"."CrimeCharacterCode" varchar,
+"info"."EscapedCriminalNumber" varchar,
+"info"."IsDetainees" varchar,
+"info"."DetentionHouseCode" varchar,
+"info"."DetaineesIdentity" varchar,
+"info"."DetaineesSpecialIdentity" varchar,
+"info"."MemberTypeCode" varchar,
+"info"."IsVictim" varchar,
+"info"."VictimType" varchar,
+"info"."InjuredDegree" varchar,
+"info"."CorpseConditionCode" varchar,
+"info"."IsSuspiciousPerson" varchar,
+"info"."SubImageInfoImageID" varchar,
+"info"."SubImageInfoEventSort" varchar,
+"info"."SubImageInfoDeviceID" varchar,
+"info"."SubImageInfoStoragePath" varchar,
+"info"."SubImageInfoType" varchar,
+"info"."SubImageInfoFileFormat" varchar,
+"info"."SubImageInfoShotTime" varchar,
+"info"."SubImageInfoWidth" varchar,
+"info"."SubImageInfoHeight" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+----------------------------------
+
+CREATE TABLE IF NOT EXISTS MASSAGE_COUNT (
+     MASSAGENAME VARCHAR NOT NULL,
+     DATESTR VARCHAR NOT NULL,
+     COUNT BIGINT,
+     CONSTRAINT PK PRIMARY KEY (MASSAGENAME, DATESTR)
+);
+
+
+
+
+----------------------------------
+
+CREATE TABLE IF NOT EXISTS MASSAGE_DEVICE_COUNT (
+     DATESTR VARCHAR NOT NULL,
+     DEVICEID VARCHAR NOT NULL,
+     COUNT BIGINT,
+     CONSTRAINT PK PRIMARY KEY (DATESTR, DEVICEID)
+);
+
+upsert into MASSAGE_DEVICE_COUNT (DATESTR,DEVICEID,COUNT)
+select '20'||REVERSE(SUBSTR("row",0,6)) "date","DeviceID",count(1) from "faceListMessagePooldb"
+where "row" like '719002%' group by SUBSTR("row",0,6),"DeviceID" HAVING "DeviceID" is not null;
+
+select * from MASSAGE_DEVICE_COUNT where DATESTR = '20200917';
+
+
+select sum(NUM) from (
+select count(1) "num" from "faceListMessagePooldb" where "row" like '819002%'
+union all
+select count(1) "num" from "imageListMessagePooldb" where "row" like '819002%'
+union all
+select count(1) "num" from "personListMessagePooldb" where "row" like '819002%'
+union all
+select sum(COUNT) "num" from MASSAGE_COUNT
+) a
+ ;
+
+
+#!/bin/bash
+count=$(ps aux | grep allMessagePoolToES | grep -v grep | wc -l)
+echo $count
+if [ $count == 0 ]; then
+  echo "Start allMessagePoolToES"
+  source /etc/profile;
+  nohup spark-submit \
+  --class com.zjxc.video.etldata.online.sparkStreaming.allToHbase.allMessagePoolToES   \
+  --master yarn \
+  --driver-memory 2G \
+  --executor-memory 2G \
+  --deploy-mode client \
+  --num-executors  1 \
+  --executor-cores  1 \
+  --jars  /opt/project/zgjq_spark/mysql-connector-java-5.1.32.jar \
+  /opt/project/zgjq_spark/es_zgjq_streaming/zajq_streaming.jar  \
+  > /opt/project/zgjq_spark/es_zgjq_streaming/log_allMessagePoolToHbase.out 2>&1 &
+fi

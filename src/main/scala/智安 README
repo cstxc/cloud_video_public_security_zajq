@@ -1,0 +1,122 @@
+-------------------------------------------------------------
+
+          upsert into MASSAGE_DEVICE_COUNT (DATESTR,DEVICEID,COUNT)
+          select '20'||REVERSE(SUBSTR("row",0,6)) "date","DeviceID",count(1) from "faceListMessagePooldb" where "row" like '$yestoday%' group by SUBSTR("row",0,6),"DeviceID" HAVING "DeviceID" is not null
+
+          upsert into MASSAGE_DEVICE_COUNT (DATESTR,DEVICEID,COUNT)
+          select a.DATE,a.DEVICEID,sum(a.NUM) from (
+          select '20'||REVERSE(SUBSTR("row",0,6)) "date","DeviceID" as "DEVICEID",count(1) as "NUM" from "faceListMessagePooldb" where "row" like '902102%' group by SUBSTR("row",0,6),"DeviceID" HAVING "DeviceID" is not null
+          union all
+          select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ" as "DEVICEID" ,count(1) as "NUM"  from "ZA_FaceCaptureListdb" where "row" like '902102%' group by SUBSTR("row",0,6),"CJSBXXBZ"
+          union all
+          select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ" as "DEVICEID" ,count(1) as "NUM"  from "ZA_MotorVehicleEventListdb" where "row" like '902102%' group by SUBSTR("row",0,6),"CJSBXXBZ"
+          )a group by a.DATE,a.DEVICEID
+
+
+
+
+select a.DATE,a.CJSBXXBZ,sum(a.NUM) from (
+select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ",count(1) "num" from "ZA_FaceCaptureListdb" where "row" like '902102%' group by SUBSTR("row",0,6),"CJSBXXBZ" HAVING "CJSBXXBZ" is not null
+union all
+select '20'||REVERSE(SUBSTR("row",0,6)) "date","CJSBXXBZ",count(1) from "ZA_MotorVehicleEventListdb" where "row" like '902102%' group by SUBSTR("row",0,6),"CJSBXXBZ" HAVING "CJSBXXBZ" is not null
+)a group by a.DATE,a.CJSBXXBZ
+;
+
+--------------------------分割线-------------------------------------
+phoenix 删除索引操作
+
+
+
+第一步删索引
+drop index "索引表名"  ON "主题表名";
+第二步删phoenix映射表
+drop table "主题表名";
+第三步删hbase表
+1.disable 'emp'   禁用表
+2.drop 'emp'   删除表
+3.exists 'emp'  验证是否删除成功
+
+
+-------------------------------------------------------------------------------
+
+
+
+
+create 'ZA_MotorVehicleEventListdb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_ZA_MotorVehicleEventListdb_row"  ON "ZA_MotorVehicleEventListdb"("row");
+
+drop table  "ZA_MotorVehicleEventListdb";
+create table  "ZA_MotorVehicleEventListdb" (
+"row"  varchar primary key,
+"info"."JDCGCXXBZ" varchar,
+"info"."CJSJ" varchar,
+"info"."CarWayCode" varchar,
+"info"."DevId" varchar,
+"info"."CLQJTXBZ" varchar,
+"info"."CLXH" varchar,
+"info"."JDCCLLXDM" varchar,
+"info"."CJSBXXBZ" varchar,
+"info"."SFWZDCL_PDBZ" varchar,
+"info"."JDCHPZLDM" varchar,
+"info"."DevName" varchar,
+"info"."IsMotorVehicleReg" varchar,
+"info"."GCFX" varchar,
+"info"."CarImgUrl" varchar,
+"info"."JDCHPYSDM" varchar,
+"info"."CarNumPic" varchar,
+"info"."JDCCSYSDM" varchar,
+"info"."DevChnName" varchar,
+"info"."CLHPTXBZ" varchar,
+"info"."JDCHPHM" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+
+
+----------------------------------
+create 'ZA_FaceCaptureListdb', 'info', SPLITS => ['0','1', '2', '3', '4','5', '6', '7', '8','9']
+
+CREATE INDEX IF NOT EXISTS "idx_ZA_FaceCaptureListdb_row"  ON "ZA_FaceCaptureListdb"("row");
+
+drop table  "ZA_FaceCaptureListdb";
+
+create table  "ZA_FaceCaptureListdb" (
+"row"  varchar primary key,
+"info"."RLZPXXBZ" varchar,
+"info"."CJSJ" varchar,
+"info"."isHit" varchar,
+"info"."SFJSY_PDBZ" varchar,
+"info"."Brard" varchar,
+"info"."XBDM" varchar,
+"info"."BeginTime" varchar,
+"info"."ChannelCode" varchar,
+"info"."Mask" varchar,
+"info"."SFGZRY_PDBZ" varchar,
+"info"."SPTXXXYYSXDXBZ" varchar,
+"info"."CJSBXXBZ" varchar,
+"info"."SY_YS" varchar,
+"info"."OccurrenceCount" varchar,
+"info"."GlobalScenePicUrl" varchar,
+"info"."Eye" varchar,
+"info"."Mouth" varchar,
+"info"."FaceImgUrl" varchar,
+"info"."XZ_YS" varchar,
+"info"."ChannelSeq" varchar,
+"info"."RLCJT_URL" varchar,
+"info"."EndTime" varchar,
+"info"."TP" varchar,
+"info"."Age" varchar,
+"info"."SFBKRY_PDBZ" varchar,
+"info"."JSONMessage" varchar
+)
+column_encoded_bytes=0
+;
+
+
+
+----------------------------------

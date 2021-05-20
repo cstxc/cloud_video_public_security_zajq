@@ -1,0 +1,35 @@
+
+
+
+
+
+定时任务
+0 5 * * * /opt/project/zgjq_spark/count_massage.sh
+
+[root@zajq01 zgjq_spark]# cat count_massage.sh
+#!/bin/bash
+zip -d cloud_video_public_security_zajq.jar   META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
+/opt/app/jdk1.8.0/bin/java -classpath /opt/project/zgjq_spark/mysql-connector-java-5.1.32.jar:/opt/project/zgjq_spark/cloud_video_public_security_zajq.jar  com.zjxc.video.etldata.online.phoenix.count_alarm
+
+[root@zajq01 zgjq_streaming]# cat allMessagestreaming.sh
+#!/bin/bash
+count=$(ps aux | grep allMessagePoolToHbase | grep -v grep | wc -l)
+echo $count
+if [ $count == 0 ]; then
+  echo "Start allMessagePoolToHbase"
+  source /etc/profile;
+  nohup spark-submit \
+  --class com.zjxc.video.etldata.online.sparkStreaming.allToHbase.allMessagePoolToHbase  \
+  --master yarn \
+  --driver-memory 2G \
+  --executor-memory 2G \
+  --deploy-mode client \
+  --num-executors  2 \
+  --executor-cores  2 \
+  --jars  /opt/project/zgjq_spark/mysql-connector-java-5.1.32.jar \
+  /opt/project/zgjq_spark/zgjq_streaming/zajq_streaming.jar  \
+  > /opt/project/zgjq_spark/zgjq_streaming/log_allMessagePoolToHbase.out 2>&1 &
+fi
+
+
+
